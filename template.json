@@ -1,0 +1,188 @@
+{
+    "AWSTemplateFormatVersion" : "2010-09-09",
+    "Description" : "template for cloudformation",
+    "Parameters" : {
+        "myvpc1cidr" : {
+            "Type" : "String",
+            "Default" : "10.0.0.0/16",
+            "AllowedValues" : ["10.0.0.0/16", "172.0.1.0/16"],
+            "Description" : "parameter for vpc cidrblock"   
+        },
+        "subnet1cidr" : {
+            "Type" :"String",
+            "Default" :"10.0.10.0/24",
+            "AllowedValues" : ["10.0.10.0/24","10.0.20.0/16","10.0.120.0/24"],
+            "Description" : "parameter for subnet1"
+    
+         },
+         "subnet2cidr" : {
+            "Type" :"String",
+            "Default" :"10.0.12.0/24",
+            "AllowedValues" : ["10.0.12.0/24","10.0.1.0/24","10.0.123.0/24"],
+            "Description" : "parameter for subnet2"
+    
+         },
+         "webnet1" : {
+            "Type" :"String",
+            "Default" :"10.0.13.0/24",
+            "AllowedValues" : ["10.0.13.0/24","10.0.3.0/24","10.0.124.0/24"],
+            "Description" : "parameter for webnet1"
+    
+         },
+         "webnet2" : {
+            "Type" :"String",
+            "Default" :"10.0.15.0/24",
+            "AllowedValues" : ["10.0.15.0/24","10.0.2.0/24","10.0.125.0/24"],
+            "Description" : "parameter for webnet2"
+    
+         }
+    
+     },
+    
+    "Resources" : {
+        "myvpc1" :{
+            "Type" : "AWS::EC2::VPC",
+            "Properties" : {
+              "CidrBlock" : 
+              { "Ref": "myvpc1cidr" }
+              ,
+              "Tags" : [
+                {
+                    "Key" : "Name",
+                    "Value" : "vpc for cloudformation"
+                  },
+                  {
+                    "Key" : "env",
+                    "Value" : "test"
+                  }
+                  
+              ]
+            }
+        },
+        "subnet1" : {
+            "Type" : "AWS::EC2::Subnet",
+         "Properties" : {
+            "CidrBlock" :
+            { "Ref": "subnet1cidr" }
+            ,
+            "VpcId" : { 
+            "Ref" : "myvpc1"   
+    },
+            "AvailabilityZone" : {
+                "Fn::Select" : [ 
+                  0, 
+                  { 
+                    "Fn::GetAZs" : "" 
+                  } 
+                ]
+              },
+              "Tags" : [
+                {
+                    "Key" : "Name",
+                    "Value" : "subnet1"
+                  },
+                  {
+                    "Key" : "env",
+                    "Value" : "test"
+                
+                }
+              ]
+        }
+
+        },
+        "subnet2" : {
+            "Type" : "AWS::EC2::Subnet",
+         "Properties" : {
+            "CidrBlock" :
+            { "Ref": "subnet2cidr" },
+            
+            "VpcId" : { 
+            "Ref" : "myvpc1"   
+    },
+            "AvailabilityZone" : {
+                "Fn::Select" : [ 
+                  1, 
+                  { 
+                    "Fn::GetAZs" : "" 
+                  } 
+                ]
+              },
+              "Tags" : [
+                {
+                    "Key" : "Name",
+                    "Value" : "subnet2"
+                  },
+                  {
+                    "Key" : "env",
+                    "Value" : "test"
+                
+                }
+              ]
+        }
+
+        },
+        "websubnet1" : {
+            "Type" : "AWS::EC2::Subnet",
+         "Properties" : {
+            "CidrBlock" : 
+            { "Ref": "webnet1" },
+            
+            "VpcId" : { 
+            "Ref" : "myvpc1"   
+    },
+            "AvailabilityZone" : {
+                "Fn::Select" : [ 
+                  2, 
+                  { 
+                    "Fn::GetAZs" : "" 
+                  } 
+                ]
+              },
+              "Tags" : [
+                {
+                    "Key" : "Name",
+                    "Value" : "websubnet1"
+                  },
+                  {
+                    "Key" : "env",
+                    "Value" : "test"
+                
+                }
+              ]
+        }
+
+        },
+        "websubnet2" : {
+            "Type" : "AWS::EC2::Subnet",
+         "Properties" : {
+            "CidrBlock" : 
+            { "Ref": "webnet2" },
+            
+            "VpcId" : { 
+            "Ref" : "myvpc1"   
+        },
+            "AvailabilityZone" : {
+                "Fn::Select" : [ 
+                  4, 
+                  { 
+                    "Fn::GetAZs" : "" 
+                  } 
+                ]
+              },
+              "Tags" : [
+                {
+                    "Key" : "Name",
+                    "Value" : "websubnet2"
+                  },
+                  {
+                    "Key" : "env",
+                    "Value" : "test"
+                
+                }
+              ]
+        }
+
+        }
+
+    }
+}
